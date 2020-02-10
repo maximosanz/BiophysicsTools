@@ -14,7 +14,7 @@ The model relies on five parameters:
 - &theta <sub>U</sub> = Ellipticity of the unfolded state
 - &theta <sub>F</sub> = Ellipticity of the folded state
 
-\theta Hey!
+&theta; Hey!
 
 The molar ellipticity &theta can be calculated and fitted to the following equations:
 
