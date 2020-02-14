@@ -1,6 +1,9 @@
 # BiophysicsTools
 Tools for analyzing molecular and biophysical data
 
+- [Circular dichroism of protein unfolding](#thermodynamical-analysis-of-protein-unfolding-by-circular-dichroism)
+- [Molecular contacts from MD trajectories](#evaluating-3d-contacts-and-ring-current-effects-from-a-molecular-dynamics-trajectory)
+
 ## Thermodynamical analysis of protein unfolding by circular dichroism
 
 #### CircularDichroism_Unfolding
@@ -94,4 +97,4 @@ This code was used to analyse different molecular interactions (e.g. Hydrogen bo
 
 [Molecular determinants of the interaction of EGCG with ordered and disordered proteins. Fusco G., Sanz‐Hernandez M., Ruggeri F. S., Vendruscolo M., Dobson C. M., De Simone A. Biopolymers 2018](https://onlinelibrary.wiley.com/doi/abs/10.1002/bip.23117)
 
-![EGCG_Interactions](https://github.com/maximosanz/BiophysicsTools/blob/master/MD_3DContacts/EGCG_Interactions.eps)
+![EGCG_Interactions](https://github.com/maximosanz/BiophysicsTools/blob/master/MD_3DContacts/EGCG_Interactions.png)
