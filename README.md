@@ -36,7 +36,7 @@ The parameters are initially approximated by creating an instance of `CD_Unfoldi
 Protein_Unfold = CD_Unfolding(T,Ellipticity,T_Units="C",Energy_Units="kcal")
 ```
 
-![Before fitting](https://github.com/maximosanz/BiophysicsTools/blob/master/CircularDichroism_Unfolding/Before_Fitting.eps)
+![Before fitting](https://github.com/maximosanz/BiophysicsTools/blob/master/CircularDichroism_Unfolding/Before_Fitting.eps?sanitize=true)
 
 And fitted by non-linear least-squares with the `Fit()` method:
 
@@ -44,7 +44,7 @@ And fitted by non-linear least-squares with the `Fit()` method:
 Protein_Unfold.Fit()
 ```
 
-![After fitting](https://github.com/maximosanz/BiophysicsTools/blob/master/CircularDichroism_Unfolding/After_Fitting.eps)
+![After fitting](https://github.com/maximosanz/BiophysicsTools/blob/master/CircularDichroism_Unfolding/After_Fitting.eps?sanitize=true)
 
 Key fitting information can be displayed by the `Info()` method:
 
@@ -84,7 +84,7 @@ to compute ring-current contacts between protein heavy atoms from residue 50 onw
 
 In addition to the contact cut-off distance ```epsilon```, ring-current effects take into account an angular cutoff. A vector ```v``` can be defined between the ring centroid and a target atom, and the angle &theta between ```v``` and the normal of the ring plane must be below the cut-off ```angle_epsilon```:
 
-![Ring-current](https://github.com/maximosanz/BiophysicsTools/blob/master/MD_3DContacts/Ring_Current.eps)
+![Ring-current](https://github.com/maximosanz/BiophysicsTools/blob/master/MD_3DContacts/Ring_Current.eps?sanitize=true)
 
 The code can be run in parallel using MPI, specifying the option -multi, e.g.
 
