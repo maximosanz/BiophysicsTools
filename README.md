@@ -84,7 +84,7 @@ to compute ring-current contacts between protein heavy atoms from residue 50 onw
 
 In addition to the contact cut-off distance ```epsilon```, ring-current effects take into account an angular cutoff. A vector ```v``` can be defined between the ring centroid and a target atom, and the angle &theta between ```v``` and the normal of the ring plane must be below the cut-off ```angle_epsilon```:
 
-![Ring-current](https://github.com/maximosanz/BiophysicsTools/blob/master/MD_3DContacts/Ring_Current.png)
+![Ring-current](https://github.com/maximosanz/BiophysicsTools/blob/master/MD_3DContacts/Ring_Current_diagram.png)
 
 The code can be run in parallel using MPI, specifying the option -multi, e.g.
 
