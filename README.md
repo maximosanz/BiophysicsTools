@@ -92,8 +92,6 @@ to split the job across ```M``` processors.
 
 This code was used to analyse different molecular interactions (e.g. Hydrogen bonds and ring-current effects) between the small molecule EGCG and the enzyme mAcP in the following publication:
 
-[Molecular determinants of the interaction of EGCG with ordered and disordered proteins
-
-Fusco G., Sanz‐Hernandez M., Ruggeri F. S., Vendruscolo M., Dobson C. M., De Simone A. Biopolymers 2018](https://onlinelibrary.wiley.com/doi/abs/10.1002/bip.23117)
+[Molecular determinants of the interaction of EGCG with ordered and disordered proteins. Fusco G., Sanz‐Hernandez M., Ruggeri F. S., Vendruscolo M., Dobson C. M., De Simone A. Biopolymers 2018](https://onlinelibrary.wiley.com/doi/abs/10.1002/bip.23117)
 
 ![EGCG_Interactions](https://github.com/maximosanz/BiophysicsTools/blob/master/MD_3DContacts/EGCG_Interactions.eps)
