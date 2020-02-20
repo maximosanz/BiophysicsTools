@@ -98,3 +98,21 @@ This code was used to analyse different molecular interactions (e.g. Hydrogen bo
 [Molecular determinants of the interaction of EGCG with ordered and disordered proteins. Fusco G., Sanz‐Hernandez M., Ruggeri F. S., Vendruscolo M., Dobson C. M., De Simone A. Biopolymers 2018](https://onlinelibrary.wiley.com/doi/abs/10.1002/bip.23117)
 
 ![EGCG_Interactions](https://github.com/maximosanz/BiophysicsTools/blob/master/MD_3DContacts/EGCG_Interactions.png)
+
+## Computing tilt and rotational angles of &alpha;-helices from a molecular dynamics trajectory
+
+#### MD_Angle_Analysis
+
+This scripts can calculate the distribution of tilt and rotational angles for &alpha;-helices during a molecular dynamics simulation. The helical axis of a protein segment is defined by performing a least-squares fit on the 3D coordinates of its backbone atoms. The angles are then defined with respect to an external fixed vector **B<sub>0</sub>**, analogous to the external magnetic field in a nuclear magnetic resonance experiment.
+  
+The following figure from [De Simone et al., Biophys J. 2014](https://www.cell.com/biophysj/fulltext/S0006-3495(14)00326-9) shows how these angles are defined in a molecular system:
+
+<img src="https://github.com/maximosanz/BiophysicsTools/blob/master/MD_Angle_Analysis/Angles_definition.png" width="600" title="Angle_definition">
+
+In addition, the code can be employed in oligomeric proteins, where more than one copy of the same molecule is present. A global angle of the oligomeric assemble can be defined too, allowing the computation of individual angles relative to the global vector.
+
+This code was employed in the following publication, where a more detailed description of the method can be found:
+
+[Accurate Determination of Conformational Transitions in Oligomeric Membrane Proteins. Sanz‐Hernandez M. et al. Scientific Reports 2016](https://www.nature.com/articles/srep23063)
+
+<img src="https://github.com/maximosanz/BiophysicsTools/blob/master/MD_Angle_Analysis/PLN_Angles.png" width="600" title="PLN_Angles">
