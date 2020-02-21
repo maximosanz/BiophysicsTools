@@ -3,6 +3,7 @@ Tools for analyzing molecular and biophysical data
 
 - [Circular dichroism of protein unfolding](#thermodynamical-analysis-of-protein-unfolding-by-circular-dichroism)
 - [Molecular contacts from MD trajectories](#evaluating-3d-contacts-and-ring-current-effects-from-a-molecular-dynamics-trajectory)
+- [Topological angle analysis in MD simulations](#computing-tilt-and-rotational-angles-of-&alpha;-helices-from-a-molecular-dynamics-trajectory)
 
 ## Thermodynamical analysis of protein unfolding by circular dichroism
 
@@ -107,7 +108,7 @@ This scripts can calculate the distribution of tilt and rotational angles for &a
   
 The following figure from [De Simone et al., Biophys J. 2014](https://www.cell.com/biophysj/fulltext/S0006-3495(14)00326-9) shows how these angles are defined in a molecular system:
 
-<img src="https://github.com/maximosanz/BiophysicsTools/blob/master/MD_Angle_Analysis/Angles_definition.png" width="600" title="Angle_definition">
+<img src="https://github.com/maximosanz/BiophysicsTools/blob/master/MD_Angle_Analysis/Angles_definition.png" width="550" title="Angle_definition">
 
 In addition, the code can be employed in oligomeric proteins, where more than one copy of the same molecule is present. A global angle of the oligomeric assemble can be defined too, allowing the computation of individual angles relative to the global vector.
 
@@ -115,4 +116,4 @@ This code was employed in the following publication, where a more detailed descr
 
 [Accurate Determination of Conformational Transitions in Oligomeric Membrane Proteins. Sanz‐Hernandez M. et al. Scientific Reports 2016](https://www.nature.com/articles/srep23063)
 
-<img src="https://github.com/maximosanz/BiophysicsTools/blob/master/MD_Angle_Analysis/PLN_Angles.png" width="600" title="PLN_Angles">
+<img src="https://github.com/maximosanz/BiophysicsTools/blob/master/MD_Angle_Analysis/PLN_Angles.png" width="800" title="PLN_Angles">
