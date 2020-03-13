@@ -2,6 +2,7 @@
 Tools for analyzing molecular and biophysical data
 
 - [Circular dichroism of protein unfolding](#thermodynamical-analysis-of-protein-unfolding-by-circular-dichroism)
+- [Principal component analysis of fluorescence emission data](#principal-component-analysis-of-fluorescence-spectra-to-fingerprint-protein-aggregates)
 - [Molecular contacts from MD trajectories](#evaluating-3d-contacts-and-ring-current-effects-from-a-molecular-dynamics-trajectory)
 - [Topological angle analysis in MD simulations](#computing-tilt-and-rotational-angles-of-&alpha;-helices-from-a-molecular-dynamics-trajectory)
 
@@ -58,6 +59,73 @@ Melting temperature =   44.71 C
 Enthalpy            =   -44.1569 kcal / mol
 deltaG at   25.00 C =   -12.3313 kcal / mol
 ```
+
+An example jupyter notebook is provided [here](https://github.com/maximosanz/BiophysicsTools/blob/master/CircularDichroism_Unfolding/Thermodynamical%20analysis%20of%20protein%20unfolding%20by%20Circular%20Dichroism.ipynb).
+
+## Principal component analysis of fluorescence spectra to fingerprint protein aggregates.
+
+#### Fluorescence_PCA
+
+There are a wide range of fluorescent molecules that have been described to bind to protein aggregates. Upon binding, their structural properties are modified leading to a change in their emission spectrum. A prominent example of such a dye is [Thioflavin-T](https://en.wikipedia.org/wiki/Thioflavin).
+
+Some dyes show a different response upon binding to different protein aggregates, and therefore they can be exploited to specifically detect and fingerprint each aggregate type based on their modified emission spectra:
+
+<img src="https://github.com/maximosanz/BiophysicsTools/blob/master/Fluorescence_PCA/Figures/Emission.jpg" width="500" title="Emission">
+
+A more powerful approach has recently emerged where the information from more than one fluorescent compound can be combined, providing a more specific signature for each protein aggregate. The combined analysis of different fluorescent dyes can be performed with principal component analysis (PCA).
+
+This code performs a PCA on fluorescence data, using a ```.csv``` file as input. An example ```TEMPLATE.csv``` file is provided, with the following structure:
+
+- The first column corresponds to the emission wavelength in nm.
+- Each subsequent column contains the data for one Sample, with the sample name in the header row
+- A new compound is introduced by a row with the keyword ```COMPOUND```, followed by the compound name
+
+A ```Fluorescence_Data``` instance can be created from the ```.csv``` file:
+
+```python
+Data = Fluorescence_Data("TEMPLATE.csv")
+```
+
+And the PCA performed with the function ```do_PCA()```, which take some optional arguments:
+
+```python
+Fluorescence_Data.do_PCA(use_compounds=None,
+               use_samples=None,
+               exclude_buffer=True,
+               N_Components=2,
+               normalised=True,
+               remove_columns=[]
+```
+
+- ```use_compounds```: a list with a subset of the compound names to use in the PCA. If ```None```, all compounds are used.
+- ```use_samples```: a list with a subset of the sample names to use in the PCA. If ```None```, all samples are used.
+- ```exclude_buffer```: Ignore samples labeled as ```buffer``` (case-insensitive) if present. Overriden by ```use_samples```.
+- ```N_Components```: Number of principal components to calculate.
+- ```normalised```: Whether to normalise the emission spectra to the ```[0,1]``` interval.
+- ```remove_columns```: Ignore specific column indices from the PCA calculation.
+
+The PCA results can be shown by plotting the first two principal components:
+
+```python
+Data.plot_PCA()
+```
+
+![PCA](https://github.com/maximosanz/BiophysicsTools/blob/master/Fluorescence_PCA/Figures/PCA.jpg)
+
+The clustering of different proteins shows how the PCA analysis can capture structural differences in the aggregates.
+
+The contribution of each compound to the PCA can also be shown:
+
+```python
+Data.plot_Compound_contribution()
+
+```
+
+<img src="https://github.com/maximosanz/BiophysicsTools/blob/master/Fluorescence_PCA/Figures/Compound_contribution_0.jpg" width="500" title="Compound_contribution_0">
+
+<img src="https://github.com/maximosanz/BiophysicsTools/blob/master/Fluorescence_PCA/Figures/Compound_contribution_1.jpg" width="500" title="Compound_contribution_1">
+
+An example jupyter notebook is provided [here](https://github.com/maximosanz/BiophysicsTools/blob/master/Fluorescence_PCA/Evaluate_PCA.ipynb).
 
 ## Evaluating 3D contacts and ring-current effects from a molecular dynamics trajectory
 
