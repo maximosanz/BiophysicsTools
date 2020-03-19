@@ -5,6 +5,7 @@ Tools for analyzing molecular and biophysical data
 - [Principal component analysis of fluorescence emission data](#principal-component-analysis-of-fluorescence-spectra-to-fingerprint-protein-aggregates)
 - [Molecular contacts from MD trajectories](#evaluating-3d-contacts-and-ring-current-effects-from-a-molecular-dynamics-trajectory)
 - [Topological angle analysis in MD simulations](#computing-tilt-and-rotational-angles-of-&alpha;-helices-from-a-molecular-dynamics-trajectory)
+- [Calculate oriented SSNMR observables from MD trajectories](#calculating-oriented-solid-state-nmr-observables-from-a-molecular-dynamics-trajectory)
 
 ## Thermodynamical analysis of protein unfolding by circular dichroism
 
@@ -185,3 +186,28 @@ This code was employed in the following publication, where a more detailed descr
 [Accurate Determination of Conformational Transitions in Oligomeric Membrane Proteins. Sanz‐Hernandez M. et al. Scientific Reports 2016](https://www.nature.com/articles/srep23063)
 
 <img src="https://github.com/maximosanz/BiophysicsTools/blob/master/MD_Angle_Analysis/PLN_Angles.png" width="800" title="PLN_Angles">
+
+## Calculating oriented solid-state NMR observables from a molecular dynamics trajectory
+
+#### MD_SSNMR_Calculator
+
+Oriented solid-state NMR (oSSNMR) is a method that provides topological and dynamical information about the orientations of proteins in the membrane. Two key oSSNMR observables are the [chemical shift anisotropy](https://en.wikipedia.org/wiki/Solid-state_nuclear_magnetic_resonance#Examples_of_anisotropic_nuclear_interactions) (CSA) and [dipolar coupling](https://en.wikipedia.org/wiki/Magnetic_dipole%E2%80%93dipole_interaction) (DC). 
+
+In the protein backbone, the CSA and DC can be calculated given the 3D coordinates of atoms, according to the following structural models:
+
+<img src="https://github.com/maximosanz/BiophysicsTools/blob/master/MD_SSNMR_Calculator/SSNMR_models.png" width="800" title="SSNMR_Models">
+
+The CSA is modelled as a rank-2 tensor centered on the amide nitrogen atom, with the following equation:
+
+![equation0](https://quicklatex.com/cache3/8c/ql_7486fa6c36a70944847264b353f9418c_l3.png)
+
+where &delta;<sub>11</sub>, &delta;<sub>22</sub> and &delta;<sub>33</sub> are respectively set to 64.0, 76.0, 216.9 ppm for non-glycine residues and 46.5, 66.3, 211.6 ppm for glycine. &alpha; and &beta; are the Euler angles (in degrees) used to transform from the laboratory frame to the principal axis frame.
+
+The DC is only dependent on the length of the covalent bond and its angle &theta; with respect to the external magnetic
+field B<sub>0</sub>:
+
+![equation1](https://quicklatex.com/cache3/80/ql_e0124faadb679341e4a8ed338b3b2680_l3.png)
+
+This script calculates the agreement between these experimental oSSNMR observables and MD trajectories in the form of Q-factors, as described in the following article.
+
+[Accurate Determination of Conformational Transitions in Oligomeric Membrane Proteins. Sanz‐Hernandez M. et al. Scientific Reports 2016](https://www.nature.com/articles/srep23063)
