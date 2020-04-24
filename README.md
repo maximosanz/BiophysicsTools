@@ -78,7 +78,7 @@ Example input and output files corresponding to a [human prion fibre](https://ww
 python Fibre_maker.py -pdb 6uur.pdb -o 6uur_100fibre.pdb -unit A,B -repeated G,J -n_units 100 -pitch 126
 ```
 
-Curved fibres can also be generated using the script, for example to reproduced an amyloid monolayer adhered to a curved hydrophobic surface:
+Curved fibres can also be generated using the script, for example to reproduce an amyloid monolayer adhered to a curved hydrophobic surface:
 
 <img src="https://github.com/maximosanz/BiophysicsTools/blob/master/Fibre_maker/Curved_fibre.png" width="600" title="Curved_fibre">
 
