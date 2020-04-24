@@ -90,7 +90,7 @@ python Fibre_maker.py -pdb 6uur.pdb -unit A -repeated G,J -n_units 40 -curvature
 
 Curvature and helical pitch can be combined to create funky amyloid structures!
 
-e.g. a protein Mobius strip.
+e.g. a protein [Möbius strip](https://en.wikipedia.org/wiki/M%C3%B6bius_strip).
 
 <img src="https://github.com/maximosanz/BiophysicsTools/blob/master/Fibre_maker/mobius.gif" width="500" title="mobius">
 
