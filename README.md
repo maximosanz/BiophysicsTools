@@ -2,7 +2,7 @@
 Tools for analyzing molecular and biophysical data
 
 - [Circular dichroism of protein unfolding](#thermodynamical-analysis-of-protein-unfolding-by-circular-dichroism)
-- [Generate helical amyloid fibre structures](#making-large-helical-amyloid-fibre-structures-from-a-pdb-file)
+- [Generate elongated amyloid fibre structures](#making-large-amyloid-fibre-structures-from-a-pdb-file)
 - [Principal component analysis of fluorescence emission data](#principal-component-analysis-of-fluorescence-spectra-to-fingerprint-protein-aggregates)
 - [Molecular contacts from MD trajectories](#evaluating-3d-contacts-and-ring-current-effects-from-a-molecular-dynamics-trajectory)
 - [Topological angle analysis in MD simulations](#computing-tilt-and-rotational-angles-of-&alpha;-helices-from-a-molecular-dynamics-trajectory)
@@ -64,19 +64,35 @@ deltaG at   25.00 C =   -12.3313 kcal / mol
 
 An example jupyter notebook is provided [here](https://github.com/maximosanz/BiophysicsTools/blob/master/CircularDichroism_Unfolding/Thermodynamical%20analysis%20of%20protein%20unfolding%20by%20Circular%20Dichroism.ipynb).
 
-## Making large helical amyloid fibre structures from a PDB file.
+## Making large amyloid fibre structures from a PDB file.
 
 #### Fibre_maker
 
-This scripts allows you to generate large fibrillar structures of a periodic amyloid assembly, incorporating a helical twist if specified (even if no cell unit is defined). Deposited PDB structures of amyloid fibrils generally represent a small cross-section of a long filament, which can be generated with this code:
+This scripts allows you to generate large fibrillar structures of a periodic amyloid assembly, incorporating a helical twist if specified (even if no cell unit is defined) or a curvature. Deposited PDB structures of amyloid fibrils generally represent a small cross-section of a long filament, which can be generated with this code:
 
-<img src="https://github.com/maximosanz/BiophysicsTools/blob/master/Fibre_maker/Fibre_maker.png" width="800" title="Fibre_maker_Fig1">
+<img src="https://github.com/maximosanz/BiophysicsTools/blob/master/Fibre_maker/Twisted_fibre.png" width="800" title="Twisted_fibre">
 
 Example input and output files corresponding to a [human prion fibre](https://www.nature.com/articles/s41594-020-0403-y) are provided. They can be reproduced using the command
 
 ```
 python Fibre_maker.py -pdb 6uur.pdb -o 6uur_100fibre.pdb -unit A,B -repeated G,J -n_units 100 -pitch 126
 ```
+
+Curved fibres can also be generated using the script, for example to reproduced an amyloid monolayer adhered to a curved hydrophobic surface:
+
+<img src="https://github.com/maximosanz/BiophysicsTools/blob/master/Fibre_maker/Curved_fibre.png" width="600" title="Curved_fibre">
+
+An example curved fibre was generated using the following command:
+
+```
+python Fibre_maker.py -pdb 6uur.pdb -unit A -repeated G,J -n_units 40 -curvature 10 -o 6uur_curved.pdb
+```
+
+Curvature and helical pitch can be combined to create funky amyloid structures!
+
+e.g. a protein Mobius strip.
+
+<img src="https://github.com/maximosanz/BiophysicsTools/blob/master/Fibre_maker/mobius.gif" width="500" title="mobius">
 
 ## Principal component analysis of fluorescence spectra to fingerprint protein aggregates.
 
