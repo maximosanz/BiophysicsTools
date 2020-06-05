@@ -45,7 +45,11 @@ class CD_Unfolding():
         
         return None
     
-    def Calc_dG(self,T,Tm,dH,dCp):
+    def Calc_dG(self,T,Tm,dH,dCp,T_Unit="K",Tm_Unit="K"):
+        if T_Unit != "K":
+            T = self.T_in_K(T,T_Unit)
+        if Tm_Unit != "K":
+            Tm = self.T_in_K(Tm,Tm_Unit)
         return dH*(1 - T/Tm) - dCp * ((Tm - T) + T*np.log(T/Tm))
         
     def Gibbs_Helmholtz_Eq(self,T,Tm,dH,dCp,ThU,ThF):
@@ -55,13 +59,9 @@ class CD_Unfolding():
         # dCp = Heat capacity
         # ThU = Ellipticity of the unfolded state
         # ThF = Ellipticity of the folded state
-        
-        if self.Units["T"] == "C":
-            T = np.copy(T)+273.
-            Tm += 273.
-        elif self.Units["T"] == "F":
-            T = (np.copy(T) + 459.67) * 5. / 9.
-            Tm = (Tm + 459.67) * 5. / 9.
+
+        T = self.T_in_K(T,self.Units["T"])
+        Tm = self.T_in_K(Tm,self.Units["T"])
         
         # Compute deltaG (Gibbs' free energy)
         self.dG = self.Calc_dG(T,Tm,dH,dCp)
@@ -91,7 +91,7 @@ class CD_Unfolding():
             
             dG_Temp = dG_TempD[self.Units["T"]]
             
-        dG = self.Calc_dG(dG_Temp,*self.Pars[:3])
+        dG = self.Calc_dG(dG_Temp,*self.Pars[:3],T_Unit=self.Units["T"],Tm_Unit=self.Units["T"])
             
         E_Fc = 1.
         if self.Units["E"] in ["cal","kcal"]:
@@ -101,4 +101,12 @@ class CD_Unfolding():
         print("Melting temperature = {:7.2f} {}".format(self.Pars[0],self.Units["T"]))
         print("Enthalpy            = {:10.4f} {} / mol".format(self.Pars[1]*E_Fc,self.Units["E"]))
         print("deltaG at {:7.2f} {} = {:10.4f} {} / mol".format(dG_Temp,self.Units["T"],dG*E_Fc,self.Units["E"]))
+        return
+
+    def T_in_K(self,T,input_unit):
+        if input_unit == "C":
+            T = np.copy(T)+273.
+        elif input_unit == "F":
+            T = (np.copy(T) + 459.67) * 5. / 9.
+        return T
 
