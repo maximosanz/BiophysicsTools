@@ -83,17 +83,20 @@ parser = argparse.ArgumentParser(description='Calculate solid-state NMR observab
 parser.add_argument('-s',metavar='structFile',help='Protein structure input file (GRO format)',required=True)
 parser.add_argument('-f',metavar='trajFile',help='Trajectory input file',required=True)
 parser.add_argument('-ssnmr',metavar='ssnmr',help='File with one line per observable, following the GROMACS-ssNMR format',required=True)
+parser.add_argument('-o',metavar='Rho',help='File with Q-factors during the simulation',required=True)
 parser.add_argument('-multi',metavar='M',help='Run the script with mpirun in parallel for M replicas',default='0')
-parser.add_argument('-kDC',metavar='K',help='Use K by default as a DC constant',default='1.0')
+parser.add_argument('-kDC',metavar='K',help='Use K by default as a DC constant',default='10.52')
 parser.add_argument('-periodicity',metavar='P',help='Number of atoms in each periodic unit (e.g. protomer)',default="1")
 parser.add_argument('-nmolecules',metavar='M',help='Number of identical molecules (e.g. protomers)',default="1")
-parser.add_argument('-o',metavar='Rho',help='File with Q-factors during the simulation',default=None)
 parser.add_argument('-BC',metavar='BackCalc',help='File with back-calculated observables',default=None)
+parser.add_argument('-timewise_BC',metavar='Timewise_BackCalc',help='Files with back-calculated observables at EVERY frame (one file per restraint type - may result in large files)',default=None)
+parser.add_argument('-absolute_DC',help='Disregard the sign of the dipolar coupling',action="store_true")
 
 args = parser.parse_args()
 
 script_dir = os.path.dirname(os.path.realpath(__file__))
 RESTRAINT_TYPES = 4
+RESTRAINT_NAMES = ["CSA","DC","Distances","hDC"]
 N_GEOMETRIES = 6
 DC_Geometries = np.array([ np.loadtxt(script_dir+"/GEOMETRIES/Geometry_{}.txt".format(i)) for i in range(N_GEOMETRIES) ])
 N_Grid = 200
@@ -176,6 +179,13 @@ for r,l in enumerate(input_ls):
 		except ValueError:
 			pass
 
+if args.timewise_BC is not None:
+	timeBC_fs = [None] * RESTRAINT_TYPES
+	types_unique = np.unique(R_Type)
+	for t in types_unique:
+		timeBC_fs[t] = open(args.timewise_BC+"_"+RESTRAINT_NAMES[t],'w')
+
+
 Traj = u.trajectory
 Nframes = len(Traj)
 
@@ -200,6 +210,8 @@ for ts in Traj:
 		elif R_t == 1:
 			v = R_Coords[:,:,1] - R_Coords[:,:,0]
 			DC = np.expand_dims(R_kDC[R_IDX],1) * 0.5 * ( 3 * do_ang(v,B0,returnCos=True)**2 - 1. )
+			if args.absolute_DC:
+				DC = np.absolute(DC)
 			R_Calc[R_IDX] = DC
 		elif R_t == 3:
 			u = R_Coords[:,:,0] - R_Coords[:,:,1]
@@ -210,6 +222,8 @@ for ts in Traj:
 			RhoIDX = np.round( (Rho + np.pi) / (2.0*np.pi) * (N_Grid-1) ).astype(int)
 			GeomIDX = np.expand_dims(R_geom[R_IDX],-1)
 			DC = np.expand_dims(R_kDC[R_IDX],1) * DC_Geometries[GeomIDX,TauIDX,RhoIDX]
+			if args.absolute_DC:
+				DC = np.absolute(DC)
 			R_Calc[R_IDX] = DC
 
 	R_CalcAvg = R_Calc.mean(-1)
@@ -246,9 +260,17 @@ for ts in Traj:
 			R_IDX = R_Type == R_t
 			Q[R_t] = np.sqrt(((R_Exp[R_IDX] - R_RepCalc[R_IDX])**2).sum() / (R_Exp[R_IDX]**2).sum())
 			o.write("Q-factor {} = {:5.3f} ; ".format(R_t,Q[R_t]))
+
+			if args.timewise_BC is not None and R_t in types_unique:
+				timeBC_fs[R_t].write("{:10.3f} ".format(ts.time))
+				typecalc = R_RepCalc[R_IDX]
+				for x in typecalc:
+					timeBC_fs[R_t].write("{:10.3f} ".format(x))
+				timeBC_fs[R_t].write("\n")
+
 		o.write("\n")
 
-if not rank:
+if not rank and args.BC is not None:
 	BC = open(args.BC,'w')
 	R_FinalCalc /= Nframes
 	for i in range(N_Restr):
