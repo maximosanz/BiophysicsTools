@@ -18,7 +18,7 @@ argparser.add_argument('-curve_axis',metavar='1.0,0.0,0.0',help='(Optional) Comm
 argparser.add_argument('-invert_curvature',help='Invert the direction of the curvature',action='store_true',default=False)
 argparser.add_argument('-offset',metavar='N',help='Include an offset of N units (can be float)',default=0)
 argparser.add_argument('-seed',metavar='S',help='Random seed',default=0)
-argparser.add_argument('-o',metavar='PDB_output',help='Output contact matrix (numpy format)',required=True)
+argparser.add_argument('-o',metavar='PDB_output',help='Output PDB file',required=True)
 args = argparser.parse_args()
 
 backbone = ["CA","C","N"]
