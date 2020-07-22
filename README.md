@@ -266,6 +266,6 @@ The option ```-baseline_correction``` applies a rolling window normalisation of 
 
 The module includes a [wavelet](https://en.wikipedia.org/wiki/Wavelet_transform) based peak detection algorithm, ```-pick_signal```, which can be used to extract the signal from the background. The sensitivity of the peak detection can be tuned with the ```-wavelet_sensitivity``` parameter, usually set to ```0.04```.
 
-<img src="https://github.com/maximosanz/BiophysicsTools/blob/master/SingleMol_Process/example/baseline_correction.png" width="800" title="Photoncount_peaks">
+<img src="https://github.com/maximosanz/BiophysicsTools/blob/master/SingleMol_Process/example/peak_detection.png" width="800" title="Photoncount_peaks">
 
 The baseline-corrected or peak-detected data can be exported into a text file for further analysis using other programs. The flag ```-outdata``` creates a new file with the same formatting as the input, and the flag ```-outpeaks``` includes one additional column per channel, indicating whereas it has been detected as background, ```B``` or as a peak, ```P```.
