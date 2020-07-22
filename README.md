@@ -7,6 +7,7 @@ Tools for analyzing molecular and biophysical data
 - [Molecular contacts from MD trajectories](#evaluating-3d-contacts-and-ring-current-effects-from-a-molecular-dynamics-trajectory)
 - [Topological angle analysis in MD simulations](#computing-tilt-and-rotational-angles-of-&alpha;-helices-from-a-molecular-dynamics-trajectory)
 - [Calculate oriented SSNMR observables from MD trajectories](#calculating-oriented-solid-state-nmr-observables-from-a-molecular-dynamics-trajectory)
+- [Analysis of photon-counting single molecule data](#analysing-time-course-photon-counting-data-from-single-molecule-experiments)
 
 ## Thermodynamical analysis of protein unfolding by circular dichroism
 
@@ -230,15 +231,41 @@ In the protein backbone, the CSA and DC can be calculated given the 3D coordinat
 
 The CSA is modelled as a rank-2 tensor centered on the amide nitrogen atom, with the following equation:
 
-![equation0](https://quicklatex.com/cache3/8c/ql_7486fa6c36a70944847264b353f9418c_l3.png)
+![equation0](https://latex.codecogs.com/gif.latex?%5Cdelta%20_%7B15_N%7D%20%3D%20%5Cdelta%20_%7B11%7D%20%5Ctimes%20%5Csin%5E2%28%5Calpha%20-%2017%29%20%5Ctimes%20%5Csin%5E2%5Cbeta%20&plus;%20%5Cdelta%20_%7B22%7D%20%5Ctimes%20%5Ccos%5E2%5Cbeta%20&plus;%20%5Cdelta%20_%7B33%7D%20%5Ctimes%20%5Ccos%5E2%28%5Calpha%20-%2017%29%20%5Ctimes%20%5Csin%5E2%5Cbeta)
 
 where &delta;<sub>11</sub>, &delta;<sub>22</sub> and &delta;<sub>33</sub> are respectively set to 64.0, 76.0, 216.9 ppm for non-glycine residues and 46.5, 66.3, 211.6 ppm for glycine. &alpha; and &beta; are the Euler angles (in degrees) used to transform from the laboratory frame to the principal axis frame.
 
 The DC is only dependent on the length of the covalent bond and its angle &theta; with respect to the external magnetic
 field B<sub>0</sub>:
 
-![equation1](https://quicklatex.com/cache3/80/ql_e0124faadb679341e4a8ed338b3b2680_l3.png)
+![equation1](https://latex.codecogs.com/gif.latex?DC_%7BNH%7D%20%3D%20%5Cfrac%7B1%7D%7B2%7D%5Czeta%20_%7BDC%7D%20%283%5Ccos%5E2%5Ctheta%20-%201%29)
 
 This script calculates the agreement between these experimental oSSNMR observables and MD trajectories in the form of Q-factors, as described in the following article.
 
 [Accurate Determination of Conformational Transitions in Oligomeric Membrane Proteins. Sanz‐Hernandez M. et al. Scientific Reports 2016](https://www.nature.com/articles/srep23063)
+
+## Analysing time course photon counting data from single molecule experiments
+
+#### SingleMol_Process
+
+This module provides a few tools for analysis of photon-counting data from Fluorescence Correlation Spectroscopy (FCS) experiments.
+
+This type of experiments are generally performed by detecting the photons emitted by fluorophores that travel through a small confocal volume (see [Brown et al., Nat Comms 2019](https://www.nature.com/articles/s41467-019-13617-0/) for details)
+
+The tool ```SingleMol_Process``` provides command line processing options.
+
+You may read in a photon count data file (one column per fluorescence channel) using the ```-input_data``` flag.
+
+You can plot the data into an image file using the ```-outplot``` flag:
+
+<img src="https://github.com/maximosanz/BiophysicsTools/blob/master/SingleMol_Process/example/plot_raw.png" width="600" title="Photoncount_raw">
+
+The option ```-baseline_correction``` applies a rolling window normalisation of the baseline to correct instrumental drift over time:
+
+<img src="https://github.com/maximosanz/BiophysicsTools/blob/master/SingleMol_Process/example/baseline_correction.png" width="800" title="Photoncount_baseline">
+
+The module includes a [wavelet](https://en.wikipedia.org/wiki/Wavelet_transform) based peak detection algorithm, ```-pick_signal```, which can be used to extract the signal from the background. The sensitivity of the peak detection can be tuned with the ```-wavelet_sensitivity``` parameter, usually set to ```0.04```.
+
+<img src="https://github.com/maximosanz/BiophysicsTools/blob/master/SingleMol_Process/example/baseline_correction.png" width="800" title="Photoncount_peaks">
+
+The baseline-corrected or peak-detected data can be exported into a text file for further analysis using other programs. The flag ```-outdata``` creates a new file with the same formatting as the input, and the flag ```-outpeaks``` includes one additional column per channel, indicating whereas it has been detected as background, ```B``` or as a peak, ```P```.
