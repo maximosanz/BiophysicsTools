@@ -66,9 +66,9 @@ def get_atnos(ls,hrange,atoms=atoms,azRes=args.azimuthalRes,nprotomers=args.npro
 	protatnos = []
 	atind = 0
 	prot = 0
+	azatnos = []
 	if azRes is not None:
 		azprotatnos = []
-		azatnos = []
 
 	for l in ls:
 		resno = int(l[:5].strip())
@@ -152,12 +152,12 @@ def calc_Az(coords,azcoords,OLS,dd,B0,invertB0az=args.invertB0az,idealAz=args.id
 	return az
 
 # This is very slow!!
-#proc = subprocess.Popen(["gmxdump",'-f',args.f],stdout=subprocess.PIPE)
+#proc = subprocess.Popen(["gmx","dump",'-f',args.f],stdout=subprocess.PIPE)
 #for line in iter(proc.stdout.readline,''):
 
 # This only works in unix and is very memory intensive!!
 print "Reading..."
-proc = commands.getoutput("gmxdump -f "+args.f)
+proc = commands.getoutput("gmx dump -f "+args.f)
 for line in proc.split('\n'):
 	l = line.strip()
 	if l[:6] == "natoms":
@@ -185,7 +185,7 @@ for line in proc.split('\n'):
 				xyz = map(float,l.split('{')[1].split('}')[0].split(','))
 				coords2[index2[0],index2[1],:] = xyz
 				if atno == maxat2:
-					B0 = calc_least_SQ(coords2)
+					B0,dd2 = calc_least_SQ(coords2)
 
 		if len(index[0]):
 			index = tuple([index[0][0],index[1][0]])
@@ -209,28 +209,28 @@ for line in proc.split('\n'):
 				for i in range(ang.shape[0]):
 					o.write("\t"+str(ang[i]))
 
-				az = calc_Az(coords,azcoords,OLS,dd,B0)
+				if args.azimuthalRes is not None:
+					az = calc_Az(coords,azcoords,OLS,dd,B0)
 
-				if args.idealAz:
-					ideal_Offset = 100.
-					NRes = az.shape[1]
-					azID = args.azimuthalRes - hrange[0]
-					offsets = np.arange(-azID*ideal_Offset,NRes*ideal_Offset-azID*ideal_Offset,ideal_Offset)
-					az = az + offsets
-					periods = np.array(az/360.,dtype=int)
-					az -= 360.*periods
-					az[az<0] += 360.
-					azstd = az.std(-1)
-					az = az.mean(-1)
-				else:
-					az = az[:,0]
+					if args.idealAz:
+						ideal_Offset = 100.
+						NRes = az.shape[1]
+						azID = args.azimuthalRes - hrange[0]
+						offsets = np.arange(-azID*ideal_Offset,NRes*ideal_Offset-azID*ideal_Offset,ideal_Offset)
+						az = az + offsets
+						periods = np.array(az/360.,dtype=int)
+						az -= 360.*periods
+						az[az<0] += 360.
+						azstd = az.std(-1)
+						az = az.mean(-1)
+					else:
+						az = az[:,0]
 
 				o.write('\n')
 				if args.azimuthalRes is not None:
 					for i in range(az.shape[0]):
 						azo.write("\t"+str(az[i]))
 					azo.write('\n')
-				#globalv = np.sum(allpcs,axis=0)
 				globalv = np.sum(OLS,axis=0)
 				globalB0 = np.sum(B0,axis=0)
 				if args.globalang is not None:
