@@ -2,10 +2,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 
+# The normalised parameter can be set to:
+# None = No normalisation performed
+# 'full' = Each individual spectrum normalised between 0 and 1
+# 'compound' = The spectra are normalised between 0 and 1 according to the min/max of each compound
+#
+# 'full' is selected by default
+
 class Fluorescence_Data:
     def __init__(self,fn,sep=','):
         self.Spectra, self.Compounds, self.Samples = _parse_file(fn,sep=',')
-        self.Spectra_Norm = _normalise_spectra(self.Spectra)
         self.Sorted_Samples = _sorted_unique(self.Samples)
         self.Colours = [ "C{}".format(i) if s.lower() != "buffer" else "gray" for i, s in enumerate(self.Sorted_Samples) ]
         return
@@ -15,7 +21,8 @@ class Fluorescence_Data:
                use_samples=None,
                exclude_buffer=True,
                N_Components=2,
-               normalised=True,
+               normalised='full',
+               smoothed=True,
                remove_columns=[]):
         compound_idx = None
         self.pca_compounds = self.Compounds
@@ -24,8 +31,10 @@ class Fluorescence_Data:
             compound_idx = [ self.Compounds.index(c) for c in use_compounds ]
             self.pca_compounds = use_compounds
         sp = self.Spectra
-        if normalised:
-            sp = self.Spectra_Norm
+        if smoothed:
+        	sp = _smooth_spectra(sp)
+        if normalised is not None:
+            sp = _normalise_spectra(sp,method=normalised)
         X = _concat_spectra(sp,compound_idx)
         if remove_columns:
             mask = np.zeros(X.shape[0],dtype=bool)
@@ -101,12 +110,14 @@ class Fluorescence_Data:
         plt.show()
         return
         
-    def plot_spectra(self,plot_compound,plot_sample=[],plot_columns=[],normalised=True,savefig=''):
+    def plot_spectra(self,plot_compound,plot_sample=[],plot_columns=[],normalised='full',smooth=True,savefig=''):
         ax = plt.gca()
         color=next(ax._get_lines.prop_cycler)['color']
         sp = self.Spectra
-        if normalised:
-            sp = self.Spectra_Norm
+        if smooth:
+        	sp = _smooth_spectra(self.Spectra)
+        if normalised is not None:
+        	sp = _normalise_spectra(sp,method=normalised)
         Samples = np.array(self.Samples)
         compound_IDX = self.Compounds.index(plot_compound)
         W = sp[compound_IDX][0]
@@ -161,13 +172,15 @@ def _parse_file(fn,sep=','):
         Spectra.append(np.array(current_spectrum,dtype=np.float64).T)
     return Spectra, Compounds, Samples
         
-def _normalise_spectra(Spectra):
+def _normalise_spectra(Spectra,method='full'):
     Spectra_Norm = []
+    axis_d = {'full' : 0,
+    	'compound' : None }
     for sp in Spectra:
         X = np.copy(sp)
         X = X.T
-        X[:,1:] -= X[:,1:].min(0)
-        X[:,1:] /= X[:,1:].max(0)
+        X[:,1:] -= X[:,1:].min(axis_d[method])
+        X[:,1:] /= X[:,1:].max(axis_d[method])
         X = X.T
         Spectra_Norm.append(X)
     return Spectra_Norm
@@ -177,5 +190,22 @@ def _concat_spectra(Spectra,idx=None):
         idx = list(range(len(Spectra)))
     concat_l = [ Spectra[i][1:] for i in idx ]
     return np.concatenate(concat_l,axis=1)
+
+def _smooth_spectra(Spectra,N_window=9):
+	Spectra_smoothed = []
+	for sp in Spectra:
+		X = np.zeros(sp.shape)
+		X[0] = sp[0]
+		for i in range(1,sp.shape[0]):
+			edge_l = np.copy(sp[i,:int(N_window/2)])
+			edge_l += sp[i,0] - edge_l[-1]
+			edge_r = np.copy(sp[i,-int(N_window/2):])
+			edge_r += sp[i,-1] - edge_r[0]
+			sp2 = np.concatenate([edge_l,sp[i],edge_r])
+			X[i] = np.convolve(np.ones(N_window),sp2,'valid') / N_window
+		Spectra_smoothed.append(X)
+	return Spectra_smoothed
+
+
         
 
