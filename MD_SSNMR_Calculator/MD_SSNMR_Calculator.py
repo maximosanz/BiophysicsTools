@@ -210,8 +210,6 @@ for ts in Traj:
 		elif R_t == 1:
 			v = R_Coords[:,:,1] - R_Coords[:,:,0]
 			DC = np.expand_dims(R_kDC[R_IDX],1) * 0.5 * ( 3 * do_ang(v,B0,returnCos=True)**2 - 1. )
-			if args.absolute_DC:
-				DC = np.absolute(DC)
 			R_Calc[R_IDX] = DC
 		elif R_t == 3:
 			u = R_Coords[:,:,0] - R_Coords[:,:,1]
@@ -222,8 +220,6 @@ for ts in Traj:
 			RhoIDX = np.round( (Rho + np.pi) / (2.0*np.pi) * (N_Grid-1) ).astype(int)
 			GeomIDX = np.expand_dims(R_geom[R_IDX],-1)
 			DC = np.expand_dims(R_kDC[R_IDX],1) * DC_Geometries[GeomIDX,TauIDX,RhoIDX]
-			if args.absolute_DC:
-				DC = np.absolute(DC)
 			R_Calc[R_IDX] = DC
 
 	R_CalcAvg = R_Calc.mean(-1)
@@ -258,12 +254,15 @@ for ts in Traj:
 			if R_t == 2:
 				continue
 			R_IDX = R_Type == R_t
-			Q[R_t] = np.sqrt(((R_Exp[R_IDX] - R_RepCalc[R_IDX])**2).sum() / (R_Exp[R_IDX]**2).sum())
+			Q_Calc = R_RepCalc[R_IDX]
+			if args.absolute_DC:
+				Q_Calc = np.absolute(Q_Calc)
+			Q[R_t] = np.sqrt(((R_Exp[R_IDX] - Q_Calc)**2).sum() / (R_Exp[R_IDX]**2).sum())
 			o.write("Q-factor {} = {:5.3f} ; ".format(R_t,Q[R_t]))
 
 			if args.timewise_BC is not None and R_t in types_unique:
 				timeBC_fs[R_t].write("{:10.3f} ".format(ts.time))
-				typecalc = R_RepCalc[R_IDX]
+				typecalc = Q_Calc
 				for x in typecalc:
 					timeBC_fs[R_t].write("{:10.3f} ".format(x))
 				timeBC_fs[R_t].write("\n")
@@ -273,5 +272,8 @@ for ts in Traj:
 if not rank and args.BC is not None:
 	BC = open(args.BC,'w')
 	R_FinalCalc /= Nframes
+	if args.absolute_DC:
+		DC_Idx = np.isin(R_Type,[1,3])
+		R_FinalCalc[DC_Idx] = np.absolute(R_FinalCalc[DC_Idx])
 	for i in range(N_Restr):
 		BC.write("{:6.3f}\n".format(R_FinalCalc[i]))
