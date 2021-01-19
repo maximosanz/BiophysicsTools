@@ -27,13 +27,13 @@ The model relies on five parameters:
 
 The molar ellipticity &theta; can be calculated and fitted to the following equations:
 
-![equation0](https://latex.codecogs.com/gif.latex?\Delta&space;G&space;=&space;\Delta&space;H&space;\left&space;(&space;\frac{1-T}{T_m}&space;\right&space;)&space;-&space;\Delta&space;C_p&space;\left&space;[&space;\left&space;(&space;T_m&space;-&space;T&space;\right&space;)&space;&plus;&space;T\log{&space;\frac{T}{T_m}}&space;\right&space;])
+![equation0](https://latex.codecogs.com/svg.latex?\Delta&space;G&space;=&space;\Delta&space;H&space;\left&space;(&space;\frac{1-T}{T_m}&space;\right&space;)-\Delta&space;C_p&space;\left&space;[&space;\left&space;(&space;T_m&space;-&space;T&space;\right&space;)&space;&plus;&space;T\log{&space;\frac{T}{T_m}}&space;\right&space;])
 
-![equation1](https://latex.codecogs.com/gif.latex?K&space;=&space;\exp{\left&space;(&space;\frac{-\Delta&space;G}{RT}&space;\right&space;)})
+![equation1](https://latex.codecogs.com/svg.latex?K=\exp{\left(\frac{-\Delta&space;G}{RT}\right)})
 
-![equation2](https://latex.codecogs.com/gif.latex?\alpha&space;=&space;\frac{K}{1&plus;K})
+![equation2](https://latex.codecogs.com/svg.latex?\alpha&space;=&space;\frac{K}{1&plus;K})
 
-![equation3](https://latex.codecogs.com/gif.latex?\theta&space;=&space;\alpha&space;\left&space;(&space;\theta_F&space;-&space;\theta_U&space;\right&space;)&space;&plus;&space;\theta_U)
+![equation3](https://latex.codecogs.com/svg.latex?\theta&space;=&space;\alpha&space;\left&space;(&space;\theta_F&space;-&space;\theta_U&space;\right&space;)&space;&plus;&space;\theta_U)
 
 The parameters are initially approximated by creating an instance of `CD_Unfolding` with some experimental data:
 
@@ -231,14 +231,14 @@ In the protein backbone, the CSA and DC can be calculated given the 3D coordinat
 
 The CSA is modelled as a rank-2 tensor centered on the amide nitrogen atom, with the following equation:
 
-![equation0](https://latex.codecogs.com/gif.latex?%5Cdelta%20_%7B15_N%7D%20%3D%20%5Cdelta%20_%7B11%7D%20%5Ctimes%20%5Csin%5E2%28%5Calpha%20-%2017%29%20%5Ctimes%20%5Csin%5E2%5Cbeta%20&plus;%20%5Cdelta%20_%7B22%7D%20%5Ctimes%20%5Ccos%5E2%5Cbeta%20&plus;%20%5Cdelta%20_%7B33%7D%20%5Ctimes%20%5Ccos%5E2%28%5Calpha%20-%2017%29%20%5Ctimes%20%5Csin%5E2%5Cbeta)
+![equation0](https://latex.codecogs.com/svg.latex?%5Cdelta%20_%7B15_N%7D%20%3D%20%5Cdelta%20_%7B11%7D%20%5Ctimes%20%5Csin%5E2%28%5Calpha%20-%2017%29%20%5Ctimes%20%5Csin%5E2%5Cbeta%20&plus;%20%5Cdelta%20_%7B22%7D%20%5Ctimes%20%5Ccos%5E2%5Cbeta%20&plus;%20%5Cdelta%20_%7B33%7D%20%5Ctimes%20%5Ccos%5E2%28%5Calpha%20-%2017%29%20%5Ctimes%20%5Csin%5E2%5Cbeta)
 
 where &delta;<sub>11</sub>, &delta;<sub>22</sub> and &delta;<sub>33</sub> are respectively set to 64.0, 76.0, 216.9 ppm for non-glycine residues and 46.5, 66.3, 211.6 ppm for glycine. &alpha; and &beta; are the Euler angles (in degrees) used to transform from the laboratory frame to the principal axis frame.
 
 The DC is only dependent on the length of the covalent bond and its angle &theta; with respect to the external magnetic
 field B<sub>0</sub>:
 
-![equation1](https://latex.codecogs.com/gif.latex?DC_%7BNH%7D%20%3D%20%5Cfrac%7B1%7D%7B2%7D%5Czeta%20_%7BDC%7D%20%283%5Ccos%5E2%5Ctheta%20-%201%29)
+![equation1](https://latex.codecogs.com/svg.latex?DC_%7BNH%7D%20%3D%20%5Cfrac%7B1%7D%7B2%7D%5Czeta%20_%7BDC%7D%20%283%5Ccos%5E2%5Ctheta%20-%201%29)
 
 This script calculates the agreement between these experimental oSSNMR observables and MD trajectories in the form of Q-factors, as described in the following article.
 
