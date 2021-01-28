@@ -231,14 +231,14 @@ In the protein backbone, the CSA and DC can be calculated given the 3D coordinat
 
 The CSA is modelled as a rank-2 tensor centered on the amide nitrogen atom, with the following equation:
 
-![equation0](https://latex.codecogs.com/svg.latex?%5Cdelta%20_%7B15_N%7D%20%3D%20%5Cdelta%20_%7B11%7D%20%5Ctimes%20%5Csin%5E2%28%5Calpha%20-%2017%29%20%5Ctimes%20%5Csin%5E2%5Cbeta%20&plus;%20%5Cdelta%20_%7B22%7D%20%5Ctimes%20%5Ccos%5E2%5Cbeta%20&plus;%20%5Cdelta%20_%7B33%7D%20%5Ctimes%20%5Ccos%5E2%28%5Calpha%20-%2017%29%20%5Ctimes%20%5Csin%5E2%5Cbeta)
+![equation0](https://latex.codecogs.com/svg.latex?\delta_{15_N}=\delta_{11}\times\sin^2(\alpha-17)\times\sin^2\beta&plus;\delta_{22}\times\cos^2\beta&plus;\delta_{22}\times\cos^2(\alpha-17)\times\sin^2\beta)
 
 where &delta;<sub>11</sub>, &delta;<sub>22</sub> and &delta;<sub>33</sub> are respectively set to 64.0, 76.0, 216.9 ppm for non-glycine residues and 46.5, 66.3, 211.6 ppm for glycine. &alpha; and &beta; are the Euler angles (in degrees) used to transform from the laboratory frame to the principal axis frame.
 
 The DC is only dependent on the length of the covalent bond and its angle &theta; with respect to the external magnetic
 field B<sub>0</sub>:
 
-![equation1](https://latex.codecogs.com/svg.latex?DC_%7BNH%7D%20%3D%20%5Cfrac%7B1%7D%7B2%7D%5Czeta%20_%7BDC%7D%20%283%5Ccos%5E2%5Ctheta%20-%201%29)
+![equation1](https://latex.codecogs.com/svg.latex?DC_{NH}=\frac{1}{2}\zeta_{DC}(3\cos^2\theta-1))
 
 This script calculates the agreement between these experimental oSSNMR observables and MD trajectories in the form of Q-factors, as described in the following article.
 
